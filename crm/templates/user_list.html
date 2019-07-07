@@ -1,0 +1,41 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div style="margin: 20px">
+    <a href="{% url 'user_add' %}" class="btn btn-sm btn-primary">添 加</a>
+    <table class="table table-hover table-bordered">
+    <thead>
+        <tr>
+            <th>序号</th>
+            <th>ID</th>
+            <th>用户名</th>
+            <th>性别</th>
+            <th>密码</th>
+            <th>所属部门</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+
+        <tbody>
+        {% for user in all_user %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ user.pk }}</td>
+            <td>{{ user.name }}</td>
+            <td>{{ user.get_gender_display }}</td>   {# 当数据库中有选择字段，前端展示的是显示值可以使用此方法 #}
+            <td>{{ user.password }}</td>
+            <td>{{ user.depart }}</td>
+            <td>
+                <a href="{% url 'user_edit' user.pk %}"><i class="fa fa-edit fa-lg" aria-hidden="true"></i></a>
+                <a href="{% url 'user_del' user.pk %}"  style="color: red"><i class="fa fa-trash-o fa-lg" aria-hidden="true"></i></a>
+            </td>
+        </tr>
+        {% endfor %}
+
+
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
+

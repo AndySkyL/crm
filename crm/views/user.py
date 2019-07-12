@@ -1,6 +1,6 @@
 from django.shortcuts import HttpResponse, reverse, render, redirect
 from crm import models
-from django import forms
+from crm.forms import UserForm
 
 
 def user_list(request):
@@ -8,20 +8,6 @@ def user_list(request):
     return render(request, 'user_list.html', {'all_user': all_user})
 
 
-class UserForm(forms.ModelForm):
-    class Meta:
-        model = models.User
-        fields = '__all__'
-        labels= {
-            'name':'用户名'
-        }
-
-        widgets = {
-            'name': forms.TextInput(attrs={'class':'form-control'}),
-            'password':forms.PasswordInput(attrs={'class':'form-control'}),
-            'gender':forms.Select(attrs={'class':'form-control'}),
-            'depart':forms.Select(attrs={'class':'form-control'})
-        }
 
 def user_add(request):
     form_obj = UserForm()
@@ -32,7 +18,7 @@ def user_add(request):
             # models.Depart.objects.create(**form_obj.cleaned_data)
             form_obj.save()
             return redirect(reverse('user_list'))
-    return render(request, 'user_add.html', {'form_obj': form_obj})
+    return render(request, 'class_edit.html', {'form_obj': form_obj})
 
 
 def user_edit(request,edit_id):
@@ -45,7 +31,7 @@ def user_edit(request,edit_id):
             # models.Depart.objects.create(**form_obj.cleaned_data)
             form_obj.save()
             return redirect(reverse('user_list'))
-    return render(request, 'user_edit.html', {'form_obj': form_obj})
+    return render(request, 'class_edit.html', {'form_obj': form_obj})
 
 
 def user_del(request,del_id):

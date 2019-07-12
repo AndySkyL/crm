@@ -25,7 +25,7 @@ SECRET_KEY = '&k_s8%o(&=850c4bw1pvans)-$=2w23x(p0ke0x51t#x3u@&&i'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -38,7 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'crm.apps.CrmConfig',
+    'rbac.apps.RbacConfig',
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -48,6 +50,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'rbac.middleware.rbac.RbacMiddleWare',
 ]
 
 ROOT_URLCONF = 'ex_crm.urls'
@@ -124,3 +127,17 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# 白名单
+VALID_URL = [
+    '^/crm/login/$',
+    '^/admin*',
+    '^/test/',
+]
+
+LOGIN_URL = [
+    '^/crm/index/$'
+]
+
+PERMISSION_SESSION_KEY = 'permission'
+MENU_SESSION_KEY = 'menus'

@@ -2,10 +2,12 @@ from django.shortcuts import HttpResponse, reverse, render, redirect
 from crm import models
 from utils.pagination import Pagination
 from crm.forms import DepartForm
-
+from django.http.request import QueryDict
 
 def depart_list(request):
     all_depart = models.Depart.objects.all()
+
+    print(request.GET.copy().urlencode())
     pages = Pagination(all_depart.count(), request.GET.get('page', 1))
 
     return render(request, 'depart_list.html',

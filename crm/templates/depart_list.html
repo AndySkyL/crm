@@ -3,6 +3,7 @@
 {% block content %}
     <div style="margin: 20px">
         {% load rbac %}
+         {% load urltag %}
         {% if request|url_access:'depart_add' %}
             <a href="{% url 'depart_add' %}" class="btn btn-sm btn-primary">添 加</a>
         {% endif %}
@@ -31,7 +32,7 @@
 
                         <td>
                             {% if request|url_access:'depart_edit' %}
-                                <a href="{% url 'depart_edit' depart.pk %}"><i class="fa fa-edit fa-lg"
+                                <a href="{% reverse_url request 'depart_edit' depart.pk %}"><i class="fa fa-edit fa-lg"
                                                                                aria-hidden="true"></i></a>
                             {% endif %}
                             {% if request|url_access:'depart_del' %}

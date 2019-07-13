@@ -27,10 +27,10 @@ class RbacMiddleWare(MiddlewareMixin):
                 return
 
         # 获取登录用的session,得到权限信息
-        permission_list = request.session[settings.PERMISSION_SESSION_KEY]
+        permission_dict = request.session[settings.PERMISSION_SESSION_KEY]
 
         # 访问的url与session中的权限进行正则匹配
-        for i in permission_list:
+        for i in permission_dict.values():
             if re.match('^{}$'.format(i['url']), url):
                 return
         return HttpResponse('无权限访问！')

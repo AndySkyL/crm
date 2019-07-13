@@ -1,45 +1,62 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-<div style="margin: 20px">
-    <a href="{% url 'class_add' %}" class="btn btn-sm btn-primary">添 加</a>
-    <table class="table table-hover table-bordered">
-    <thead>
-        <tr>
-            <th>序号</th>
-            <th>ID</th>
-            <th>校区班级</th>
-            <th>学费</th>
-            <th>开班日期</th>
-            <th>结业日期</th>
-            <th>班主任</th>
-            <th>任课老师</th>
-            <th>操作</th>
-        </tr>
-    </thead>
+    <div style="margin: 20px">
+        {% load rbac %}
+        {% if request|url_access:'class_add' %}
+            <a href="{% url 'class_add' %}" class="btn btn-sm btn-primary">添 加</a>
+        {% endif %}
 
-        <tbody>
-        {% for class in all_class %}
-        <tr>
-            <td>{{ forloop.counter }}</td>
-            <td>{{ class.pk }}</td>
-            <td>{{ class.school }} {{ class.course }} {{ class.semester }}</td>
-            <td>{{ class.price }}</td>
-            <td>{{ class.start_date|date:'Y-m-d' }}</td>    {# 使用变量过滤器对时间进行格式化显示 #}
-            <td>{{ class.graduate_date }}</td>
-            <td>{{ class.tutor }}</td>
-            <td>{{ class.show_teachers }}</td>
-            <td>
-                <a href="{% url 'class_edit' class.pk %}"><i class="fa fa-edit fa-lg" aria-hidden="true"></i></a>
-                <a href="{% url 'class_del' class.pk %}"  style="color: red"><i class="fa fa-trash-o fa-lg" aria-hidden="true"></i></a>
-            </td>
-        </tr>
-        {% endfor %}
+        <table class="table table-hover table-bordered">
+            <thead>
+            <tr>
+                <th>序号</th>
+                <th>ID</th>
+                <th>校区班级</th>
+                <th>学费</th>
+                <th>开班日期</th>
+                <th>结业日期</th>
+                <th>班主任</th>
+                <th>任课老师</th>
+                {% if request|url_access:'class_edit' or request|url_access:'class_del' %}
+                    <th>操作</th>
+                {% endif %}
+
+            </tr>
+            </thead>
+
+            <tbody>
+            {% for class in all_class %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ class.pk }}</td>
+                    <td>{{ class.school }} {{ class.course }} {{ class.semester }}</td>
+                    <td>{{ class.price }}</td>
+                    <td>{{ class.start_date|date:'Y-m-d' }}</td>
+                    {# 使用变量过滤器对时间进行格式化显示 #}
+                    <td>{{ class.graduate_date }}</td>
+                    <td>{{ class.tutor }}</td>
+                    <td>{{ class.show_teachers }}</td>
+                    {% if request|url_access:'class_edit' or request|url_access:'class_del' %}
+                        <td>
+                            {% if request|url_access:'class_edit' %}
+                                <a href="{% url 'class_edit' class.pk %}"><i class="fa fa-edit fa-lg"
+                                                                             aria-hidden="true"></i></a>
+                            {% endif %}
+                            {% if request|url_access:'class_del' %}
+                                <a href="{% url 'class_del' class.pk %}" style="color: red"><i
+                                        class="fa fa-trash-o fa-lg" aria-hidden="true"></i></a>
+                            {% endif %}
+                        </td>
+                    {% endif %}
+
+                </tr>
+            {% endfor %}
 
 
-        </tbody>
-    </table>
-</div>
+            </tbody>
+        </table>
+    </div>
 
 {% endblock %}
 

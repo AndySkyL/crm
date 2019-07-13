@@ -155,17 +155,10 @@
 <div class="pg-body">
     <div class="left-menu">
         <div class="menu-body">
-            <div class="static-menu">
-{#                <a href="{% url 'depart_list' %}"><span class="icon-wrap"><i class="fa fa-map-o" aria-hidden="true"></i></span>#}
-{#                    部门管理</a>#}
-{#                <a href="{% url 'user_list' %}"><span class="icon-wrap"><i class="fa fa-map-o" aria-hidden="true"></i></span> 用户管理</a>#}
 
-                {% for menu in request.session.menus %}
-                    <a href="{{ menu.url }}"><span class="icon-wrap"><i class="fa fa-map-o" aria-hidden="true"></i></span>{{ menu.title }}</a>
+        {% load rbac %}
+        {% menu request %}
 
-                {% endfor %}
-
-            </div>
         </div>
     </div>
     <div class="right-body">

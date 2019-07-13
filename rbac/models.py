@@ -5,6 +5,7 @@ from django.db import models
 class Permission(models.Model):
     url = models.CharField('含正则的URL', max_length=128)
     title = models.CharField('标题', max_length=32, blank=True, null=True)
+    name = models.CharField('URL别名',max_length=32,unique=True)
     is_menu = models.BooleanField('是否是菜单', default=False)
 
     def __str__(self):

@@ -5,8 +5,8 @@ from crm.models import User
 
 # 显示字段名称，和可编辑项
 class PermissionAdmin(admin.ModelAdmin):
-    list_display = ['title', 'url', 'is_menu']
-    list_editable = ['url', 'is_menu']
+    list_display = ['title', 'url', 'is_menu','name']
+    list_editable = ['url', 'is_menu','name']
 
 
 # 注册表

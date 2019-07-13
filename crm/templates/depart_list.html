@@ -1,92 +1,106 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-<div style="margin: 20px">
-    <a href="{% url 'depart_add' %}" class="btn btn-sm btn-primary">添 加</a>
-    <table class="table table-hover table-bordered">
-    <thead>
-        <tr>
-            <th>序号</th>
-            <th>ID</th>
-            <th>部门名称</th>
-            <th>描述</th>
-            <th>操作</th>
-        </tr>
-    </thead>
+    <div style="margin: 20px">
+        {% load rbac %}
+        {% if request|url_access:'depart_add' %}
+            <a href="{% url 'depart_add' %}" class="btn btn-sm btn-primary">添 加</a>
+        {% endif %}
+        <table class="table table-hover table-bordered">
+            <thead>
+            <tr>
+                <th>序号</th>
+                <th>ID</th>
+                <th>部门名称</th>
+                <th>描述</th>
+                 {% if request|url_access:'depart_edit' or request|url_access:'depart_del' %}
+                <th>操作</th>
+                {% endif %}
+            </tr>
+            </thead>
 
-        <tbody>
-        {% for depart in all_depart %}
-        <tr>
-            <td>{{ forloop.counter }}</td>
-            <td>{{ depart.pk }}</td>
-            <td>{{ depart.name }}</td>
-            <td>{{ depart.desc|default:"暂无" }}</td>
-            <td>
-                <a href="{%  url 'depart_edit' depart.pk %}"><i class="fa fa-edit fa-lg" aria-hidden="true"></i></a>
-                <a class="del" del_id="{{ depart.pk }}" style="color: red"><i class="fa fa-trash-o fa-lg" aria-hidden="true"></i></a>
-            </td>
-        </tr>
-        {% endfor %}
-
-
-        </tbody>
-    </table>
+            <tbody>
+            {% for depart in all_depart %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ depart.pk }}</td>
+                    <td>{{ depart.name }}</td>
+                    <td>{{ depart.desc|default:"暂无" }}</td>
+                    {% if request|url_access:'depart_edit' or request|url_access:'depart_del' %}
 
 
+                        <td>
+                            {% if request|url_access:'depart_edit' %}
+                                <a href="{% url 'depart_edit' depart.pk %}"><i class="fa fa-edit fa-lg"
+                                                                               aria-hidden="true"></i></a>
+                            {% endif %}
+                            {% if request|url_access:'depart_del' %}
+                                <a class="del" del_id="{{ depart.pk }}" style="color: red"><i
+                                        class="fa fa-trash-o fa-lg" aria-hidden="true"></i></a>
+                            {% endif %}
+                        </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
 
-    <nav aria-label="Page navigation">
-        <ul class="pagination">
-        {{ page_html }}
-        </ul>
-     </nav>
 
-</div>
+            </tbody>
+        </table>
+
+
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                {{ page_html }}
+            </ul>
+        </nav>
+
+    </div>
 
 {% endblock %}
 
 {% block js %}
     <script>
-    $('.del').click(function () {
+        $('.del').click(function () {
 
-        // 导入提示效果
-        swal({
-        title: "确认删除吗?",       // 删除提示主题
-        text: "一旦删除，相关信息将无法恢复！",   // 删除提示细节内容
-        icon: "warning",     // 警告图标
-        buttons: true,
-        dangerMode: true,
-        })
-        .then((willDelete) => {      // 弹出提示框后，判断点击的是确认还是取消
-        if (willDelete) {            // 如果确认则为true, 否则为false
-
-          //  console.log($(this).attr('del_id'))  // 测试是否能获取到点击对象对应的ID值
-
-            $.ajax({
-                url:'/crm/depart/del/' + $(this).attr('del_id'), // 获取点击图标的属性值del_id
-                type:'get',
-
-                // 这里使用=>函数而不是使用function，目的是让$this始终表示a标签，而不会重新绑定$this的指向
-                // 如果使用success:function（ret）的方式， $this将指向ajax
-                success:(res) => {     // 拿到结果字典
-                    if(res.status){     // js中 1为true  0 为false
-                        swal('文件删除错误');
-                    }else {
-                        // 删除成功
-                        swal("删除成功！", {
-                        icon: "success",
-                        });
-                        // 在页面删除对应的数据
-                        $(this).parent().parent().remove()
-                    }
-
-                }
+            // 导入提示效果
+            swal({
+                title: "确认删除吗?",       // 删除提示主题
+                text: "一旦删除，相关信息将无法恢复！",   // 删除提示细节内容
+                icon: "warning",     // 警告图标
+                buttons: true,
+                dangerMode: true,
             })
+                .then((willDelete) => {      // 弹出提示框后，判断点击的是确认还是取消
+                    if (willDelete) {            // 如果确认则为true, 否则为false
 
-         } else {
-            swal("删除操作被取消！");
-         }
-});
+                        //  console.log($(this).attr('del_id'))  // 测试是否能获取到点击对象对应的ID值
 
-    })
+                        $.ajax({
+                            url: '/crm/depart/del/' + $(this).attr('del_id'), // 获取点击图标的属性值del_id
+                            type: 'get',
+
+                            // 这里使用=>函数而不是使用function，目的是让$this始终表示a标签，而不会重新绑定$this的指向
+                            // 如果使用success:function（ret）的方式， $this将指向ajax
+                            success: (res) => {     // 拿到结果字典
+                                if (res.status) {     // js中 1为true  0 为false
+                                    swal('文件删除错误');
+                                } else {
+                                    // 删除成功
+                                    swal("删除成功！", {
+                                        icon: "success",
+                                    });
+                                    // 在页面删除对应的数据
+                                    $(this).parent().parent().remove()
+                                }
+
+                            }
+                        })
+
+                    } else {
+                        swal("删除操作被取消！");
+                    }
+                });
+
+        })
     </script>
 {% endblock %}

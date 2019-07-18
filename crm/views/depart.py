@@ -2,7 +2,7 @@ from django.shortcuts import HttpResponse, reverse, render, redirect
 from crm import models
 from utils.pagination import Pagination
 from crm.forms import DepartForm
-from django.http.request import QueryDict
+from crm.utils.url_params import reserse_url
 
 def depart_list(request):
     all_depart = models.Depart.objects.all()
@@ -15,7 +15,6 @@ def depart_list(request):
 
 
 
-
 def depart_add(request):
     form_obj = DepartForm()
     if request.method == 'POST':
@@ -24,7 +23,7 @@ def depart_add(request):
             # 保存到数据库中
             # models.Depart.objects.create(**form_obj.cleaned_data)
             form_obj.save()
-            return redirect(reverse('depart_list'))
+            return redirect(reserse_url(request,'depart_list'))
     return render(request, 'depart_add.html', {'form_obj': form_obj})
 
 
@@ -36,7 +35,7 @@ def depart_edit(request, edit_id):
         form_obj = DepartForm(request.POST, instance=obj)
         if form_obj.is_valid():
             form_obj.save()
-            return redirect(reverse('depart_list'))
+            return redirect(reserse_url(request,'depart_list'))
 
     return render(request, 'depart_edit.html', {'form_obj': form_obj})
 

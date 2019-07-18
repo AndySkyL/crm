@@ -5,7 +5,7 @@
         {% load rbac %}
          {% load urltag %}
         {% if request|url_access:'depart_add' %}
-            <a href="{% url 'depart_add' %}" class="btn btn-sm btn-primary">添 加</a>
+            <a href="{% reverse_url request 'depart_add' %}" class="btn btn-sm btn-primary">添 加</a>
         {% endif %}
         <table class="table table-hover table-bordered">
             <thead>

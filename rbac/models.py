@@ -1,12 +1,27 @@
 from django.db import models
 
 
+
+class Menu(models.Model):
+    '''
+    一级菜单
+    '''
+    title = models.CharField(max_length=32)
+    icon = models.CharField(max_length=32)   # 存放图标的样式
+    weight = models.IntegerField(default=1) # 设置默认权重为1
+
+    def __str__(self):
+        return self.title
+
+
+
 # 权限表
 class Permission(models.Model):
     url = models.CharField('含正则的URL', max_length=128)
     title = models.CharField('标题', max_length=32, blank=True, null=True)
     name = models.CharField('URL别名',max_length=32,unique=True)
-    is_menu = models.BooleanField('是否是菜单', default=False)
+    menu = models.ForeignKey('Menu',blank=True,null=True)   # 关联一级菜单的ID
+    parent = models.ForeignKey('Permission',blank=True,null=True)   # 关联自身表中二级菜单的ID
 
     def __str__(self):
         return self.title

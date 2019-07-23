@@ -15,7 +15,7 @@ def menu(request):
         i = order_dict[key] = menus_dict[key]
         i['class'] = 'hide'
         for child in i['children']:
-            if child['id'] == request.current_id:
+            if child['id'] == getattr(request,settings.MENU):
                 child['class'] = 'active'
                 i['class'] = ''
 
@@ -31,5 +31,5 @@ def url_access(request, name):
 
 @register.inclusion_tag('breadcrumb.html')
 def breadcrumb(request):
-    breadcrumb_list = request.breadcrumb_list
+    breadcrumb_list = getattr(request,settings.BREADCRUMB)
     return {'breadcrumb_list':breadcrumb_list}

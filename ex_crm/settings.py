@@ -139,5 +139,18 @@ LOGIN_URL = [
     '^/crm/index/$'
 ]
 
+# 权限信息
+
 PERMISSION_SESSION_KEY = 'permission'
+
+# 菜单信息
+
 MENU_SESSION_KEY = 'menus'
+
+# 二级菜单
+
+MENU = 'current_id'
+
+# 路径导航
+
+BREADCRUMB = 'breadcrumb_list'
